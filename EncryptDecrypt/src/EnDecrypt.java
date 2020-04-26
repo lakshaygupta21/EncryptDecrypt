@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class EnDecrypt extends JFrame {
-
+    String s ;
     JLabel message;
     JButton encrypt;
     JButton decrypt;
@@ -12,9 +12,13 @@ public class EnDecrypt extends JFrame {
     JPanel panel;
     JLabel output;
     JPanel outputPanel;
-
+    JRadioButton caesar;
+    JRadioButton hill;
+    ButtonGroup G;
     EnDecrypt(){
-
+caesar =    new JRadioButton();
+hill = new JRadioButton();
+G = new ButtonGroup();
 input= new JTextArea();
 encrypt = new JButton("ENCRYPT");
 decrypt = new JButton("DECRYPT");
@@ -28,12 +32,22 @@ decrypt.setBounds(310,20,150,30);
 message.setFont(new Font("Serif", Font.PLAIN, 16));
 input.setFont(new Font("Helvetica",Font.PLAIN,20));
 output.setFont(new Font("Serif", Font.PLAIN, 16));
-
+caesar.setFont(new Font("Serif",Font.PLAIN,14));
+hill.setFont(new Font("Serif",Font.PLAIN,14));
+caesar.setText("Caesar Cipher,3");
+hill.setText("Caesar Cipher,4");
+caesar.setSelected(true);
+caesar.setBounds(180,10,120,30);
+hill.setBounds(180,35,120,30);
 message.setBounds(20,60,500,20);
 input.setBounds(40,100,400,200);
 outputPanel.setBounds(20,320,440,100);
 outputPanel.setBackground(Color.YELLOW);
 outputPanel.add(output);
+G.add(caesar);
+G.add(hill);
+panel.add(caesar);
+panel.add(hill);
 panel.add(encrypt);
 panel.add(decrypt);
 panel.add(message);
@@ -45,13 +59,29 @@ add(panel);
 setSize(500,500);
         encrypt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                 String s = new String(encryptT(input.getText().toString(),4)); //key =4
-                 output.setText(s);
+
+                if(caesar.isSelected()) {
+                    s = new String(caesarCipherEncrypt(input.getText().toString(), 3)); //key =3
+                }else if(hill.isSelected()){
+                    s = new String(caesarCipherEncrypt(input.getText().toString(), 4)); //key =4
+                }else{
+                    s = new String("Enter Text");
+                }
+                output.setText(s);
+
             }
         } );
         decrypt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String s = new String(decryptT(input.getText().toString(),4));
+
+                if(caesar.isSelected()) {
+                    s = new String(caesarCipherDecrypt(input.getText().toString(), 3)); //key =3
+                }else if(hill.isSelected()){
+                    s = new String(caesarCipherDecrypt(input.getText().toString(), 4)); //key =4
+                }else{
+                    s = new String("Enter Text");
+
+                }
                 output.setText(s);
             }
         } );
@@ -59,7 +89,7 @@ show();
 
     }
 
-    public static StringBuffer encryptT(String text, int s)
+    public static StringBuffer caesarCipherEncrypt(String text, int s)
     {
         StringBuffer result= new StringBuffer();
 
@@ -80,7 +110,7 @@ show();
         }
         return result;
     }
-public static String decryptT(String message, int key){
+public static String caesarCipherDecrypt(String message, int key){
     String decryptedMessage = "";
     char ch;
     for(int i = 0; i < message.length(); ++i){
